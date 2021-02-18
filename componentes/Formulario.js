@@ -5,6 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 const Formulario = ({citas, setCitas}) => {
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
   	setDatePickerVisibility(true);
@@ -14,9 +15,23 @@ const Formulario = ({citas, setCitas}) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date) => {
+  const confirmarFecha = (date) => {
     console.warn("A date has been picked: ", date);
     hideDatePicker();
+  };
+
+	//muestra u oculta el time picker
+	const showTimePicker = () => {
+  	setTimePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setTimePickerVisibility(false);
+  };
+
+	const confirmarHora = (time) => {
+    console.warn("A date has been picked: ", time);
+    hideTimePicker();
   };
 	
   return (
@@ -52,8 +67,18 @@ const Formulario = ({citas, setCitas}) => {
 						<DateTimePickerModal
 							isVisible={isDatePickerVisible}
 							mode="date"
-							onConfirm={handleConfirm}
+							onConfirm={confirmarFecha}
 							onCancel={hideDatePicker}
+						/>
+				</View>
+
+				<View>
+						<Button title="Seleccionar Hora" onPress={showTimePicker} />
+						<DateTimePickerModal
+							isVisible={isTimePickerVisible}
+							mode="time"
+							onConfirm={confirmarHora}
+							onCancel={hideTimePicker}
 						/>
 				</View>
 
