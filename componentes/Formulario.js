@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View, TextInput, Button, TouchableHighlight, Alert, ScrollView } from 'react-native';
+import { 
+	Text, 
+	StyleSheet, 
+	View, 
+	TextInput, 
+	Button, 
+	TouchableHighlight, 
+	Alert, 
+	ScrollView,
+} from 'react-native';
+
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { dateFormat } from '../helpers/dateFormat';
 import { timeFormat } from '../helpers/timeFormat';
+import shortid from 'shortid';
 
-const Formulario = ({citas, setCitas}) => {
+const Formulario = ({citas, setCitas, setMostrarForm}) => {
 
 	const [paciente, setPaciente] = useState('');
 	const [propietario, setPropietario] = useState('');
@@ -44,6 +55,9 @@ const Formulario = ({citas, setCitas}) => {
   };
 
 	const crearNuevaCita = () => {
+
+		console.log("paciente", paciente);
+
 		if (paciente.trim() === '' ||
 				propietario.trim() === '' ||
 				telefono.trim() === '' ||
@@ -54,6 +68,21 @@ const Formulario = ({citas, setCitas}) => {
 			mostrarAlerta();
 			return;
 		}
+
+		//Crear una nueva cita
+		const cita = { paciente, propietario, telefono, sintomas, fecha, hora };
+
+		cita.id = shortid.generate();
+
+		//Agregar al state
+		const citasNuevo = [...citas, cita];
+		setCitas(citasNuevo);
+
+		//Ocultar formulario
+		setMostrarForm(false);
+
+		//resetear formulario
+
 	}
 
 	//Muestra la alerta si falla la validacion
@@ -74,7 +103,7 @@ const Formulario = ({citas, setCitas}) => {
 						<Text style={styles.label}>Paciente:</Text>
 						<TextInput
 							style={styles.input}
-							onChangeText={ texto => setPaciente(texto) }
+							onChangeText={setPaciente}
 						/>
 				</View>
 
@@ -82,7 +111,7 @@ const Formulario = ({citas, setCitas}) => {
 						<Text style={styles.label}>Propietario:</Text>
 						<TextInput
 							style={styles.input}
-							onChangeText={ texto => setPropietario(texto) }
+							onChangeText={setPropietario}
 						/>
 				</View>
 
@@ -90,7 +119,7 @@ const Formulario = ({citas, setCitas}) => {
 						<Text style={styles.label}>Teléfono Contacto:</Text>
 						<TextInput
 							style={styles.input}
-							onChangeText={ texto => setTelefono(texto) }
+							onChangeText={setTelefono}
 							keyboardType='numeric'
 						/>
 				</View>
@@ -134,12 +163,12 @@ const Formulario = ({citas, setCitas}) => {
 					<TextInput
 							multiline
 							style={styles.input}
-							onChangeText={ texto => setSintomas(texto) }
+							onChangeText={setSintomas}
 					/>
 				</View>
 
 				<View>
-					<TouchableHighlight onPress={ () => crearNuevaCita()} style={styles.btnSubmit}>
+					<TouchableHighlight onPress={crearNuevaCita} style={styles.btnSubmit}>
 							<Text style={styles.textoSubmit}>Guardar</Text>
 					</TouchableHighlight>
         </View>
